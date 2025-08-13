@@ -1,0 +1,14 @@
+# Ignore Python bytecode & cache
+__pycache__/
+# Ignore environment files
+.env
+spark-temp/
+venv/
+core/tests
+.vscode/
+.vscode/extensions.json
+jars
+tar
+wheels
+values-secret.yaml
+
