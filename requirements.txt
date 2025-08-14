@@ -1,0 +1,4 @@
+boto3==1.38.38
+python-dotenv==1.1.1
+websockets==15.0.1
+Requests==2.32.4
