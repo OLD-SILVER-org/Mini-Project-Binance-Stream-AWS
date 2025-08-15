@@ -11,4 +11,5 @@ jars
 tar
 wheels
 values-secret.yaml
+test/
 
