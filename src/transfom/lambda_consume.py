@@ -6,7 +6,8 @@ import os
 from dotenv import load_dotenv
 from src.transfom.transformer import Transformer
 import io
-
+import pyarrow as pa
+import pyarrow.parquet as pq
 
 load_dotenv()
 
@@ -19,6 +20,7 @@ class LambdaConsume:
         self.STREAM_NAME = os.getenv("STREAM_NAME")
         self.SHARD_ID = os.getenv("SHARD_ID")
         self.SHARD_ITERATOR_TYPE = os.getenv("SHARD_ITERATOR_TYPE")
+        self.LAMBDA_FETCH_DELAY = int(os.getenv("LAMBDA_FETCH_DELAY", 1))
         self.LIMIT_RECORD = int(os.getenv("LIMIT_RECORD", "100"))
         self.transformer = Transformer()
         self.s3 = boto3.client('s3', region_name=self.AWS_REGION)
@@ -29,7 +31,18 @@ class LambdaConsume:
         timestamp = int(time.time())
         key = f"{self.PROJECT_NAME}/{timestamp}.parquet"
         buffer = io.BytesIO()
-        df.to_parquet(buffer, index=False)
+        # Convert pandas DataFrame -> Arrow Table
+        table = pa.Table.from_pandas(df, preserve_index=False)
+
+        # Write Parquet with Athena-friendly settings
+        pq.write_table(
+            table,
+            buffer,
+            compression="snappy",
+            version="1.0",               # Parquet v1
+            coerce_timestamps="ms",      # Epoch ms
+            allow_truncated_timestamps=True
+        )
         buffer.seek(0)
 
         self.s3.put_object(Bucket=self.bucket, Key=key, Body=buffer.getvalue())
@@ -42,6 +55,7 @@ class LambdaConsume:
             return
 
         df = self.transformer.transform_data(records)
+
         s3_key = self.save_to_s3(df)
         self.logger.info(f"✅Saved processed data to S3: {s3_key}")
 
@@ -89,7 +103,7 @@ class LambdaConsume:
             else:
                 self.logger.info("⏳ No new records. Waiting...")
 
-            time.sleep(1)
+            time.sleep(self.LAMBDA_FETCH_DELAY)
 
 
 if __name__ == "__main__":
