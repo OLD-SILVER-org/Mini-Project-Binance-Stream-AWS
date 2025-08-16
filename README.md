@@ -1,4 +1,4 @@
-# Binance Stream - AWS: Real-time Crypto Data Pipeline
+# Mini Project Binance Stream - AWS: Real-time Crypto Data Pipeline
 
 A mini project that demonstrates a **cloud-native real-time data pipeline**.  
 It streams data from **Binance WebSocket**, processes it with **AWS services**, and visualizes insights in **Power BI Desktop**.  
