@@ -24,14 +24,14 @@ It streams data from **Binance WebSocket**, processes it with **AWS services**, 
 ---
 
 ## 🛠️ Technologies Used
-- **Binance WebSocket API**: Real-time market data source.  
-- **AWS Kinesis Data Stream**: Streaming ingestion layer.  
-- **AWS Lambda**: Serverless consumer for data transformation & normalization.  
-- **Amazon S3**: Data lake for storage.  
-- **Amazon Athena**: Query service over S3.  
-- **Power BI Desktop**: Business Intelligence visualization.  
-- **Python**: Producer & Lambda code.  
-
+- **Binance WebSocket API**: Real-time market data source  
+- **AWS Kinesis Data Stream**: Streaming ingestion layer  
+- **AWS Lambda**: Serverless consumer for data transformation & normalization  
+- **Amazon S3**: Data lake for storage  
+- **Amazon Athena**: Query service over S3  
+- **Power BI Desktop**: Business Intelligence visualization  
+- **Python**: Producer & Lambda code  
+- **Pandas**: Data transformation and normalization inside Lambda  
 ---
 
 ## 🚀 Features
